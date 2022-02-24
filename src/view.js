@@ -9,25 +9,22 @@ const handleProcessError = () => {
 export const renderErrors = (element, errors) => {
   const fieldName = 'name';
   const fieldElement = element.name;
-  let fieldHasError;
-  errors.then((errorsObject) => {
-    const error = errorsObject[fieldName];
-    fieldHasError = has(errorsObject, fieldName);
-    if (!fieldHasError) {
-      fieldElement.classList.remove('is-invalid');
+  const error = errors[fieldName];
+  const fieldHasError = has(errors, fieldName);
+  if (!fieldHasError) {
+    fieldElement.classList.remove('is-invalid');
+  } else {
+    if (!element.container.querySelector('div')) {
+      const feedbackElement = document.createElement('div');
+      feedbackElement.classList.add('invalid-feedback');
+      feedbackElement.textContent = errors[fieldName].message;
+      fieldElement.after(feedbackElement);
     } else {
-      if (!element.container.querySelector('div')) {
-        const feedbackElement = document.createElement('div');
-        feedbackElement.classList.add('invalid-feedback');
-        feedbackElement.textContent = errorsObject[fieldName].message;
-        fieldElement.after(feedbackElement);
-      } else {
-        const feedbackElement = element.container.querySelector('div');
-        feedbackElement.textContent = error.message;
-      }
-      fieldElement.classList.add('is-invalid');
+      const feedbackElement = element.container.querySelector('div');
+      feedbackElement.textContent = error.message;
     }
-  });
+    fieldElement.classList.add('is-invalid');
+  }
 };
 
 export const watchedState = onChange(state, (path) => {

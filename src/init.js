@@ -14,7 +14,7 @@ export const errorMessages = {
   },
 };
 
-export const validate = (fields) => schema.validate(fields, { abortEarly: false })
+const validate = (fields) => schema.validate(fields, { abortEarly: false })
   .then(() => {
     const obj = {};
     return obj;
@@ -33,29 +33,35 @@ export default () => {
     const input = e.target[0];
     const { value } = input;
     watchedState.form.fields.name = value;
-    const errors = validate(watchedState.form.fields);
-    watchedState.form.valid = isEmpty(errors);
-    watchedState.form.processState = 'sending';
-    axios.get(value)
-      .then((response) => {
-        renderErrors(elements, errors);
-        if (!watchedState.form.feeds.includes(value)) {
-          watchedState.form.feeds.push(value);
-          elements.form.reset();
-          elements.name.focus();
+    validate(watchedState.form.fields)
+      .then((errors) => {
+        watchedState.form.valid = isEmpty(errors);
+        watchedState.form.processState = 'sending';
+        if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
+          axios.get(value)
+            .then((response) => {
+              renderErrors(elements, errors);
+              if (!watchedState.form.feeds.includes(value)) {
+                watchedState.form.feeds.push(value);
+                elements.form.reset();
+                elements.name.focus();
+              }
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+              watchedState.form.processState = 'error';
+              watchedState.form.processError = errorMessages.network.error;
+              throw error;
+            });
         } else {
-          watchedState.form.errors.name = {};
-          watchedState.form.errors.name.message = 'Duplicate feed';
-          renderErrors(elements, Promise.resolve(watchedState.form.errors));
+          renderErrors(elements, errors);
+          if (watchedState.form.feeds.includes(value)) {
+            watchedState.form.errors.name = {};
+            watchedState.form.errors.name.message = 'Duplicate feed';
+            renderErrors(elements, watchedState.form.errors);
+          }
         }
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        watchedState.form.processState = 'error';
-        watchedState.form.processError = errorMessages.network.error;
-        renderErrors(elements, errors);
-        throw error;
       });
     watchedState.form.processState = 'sent';
   });
