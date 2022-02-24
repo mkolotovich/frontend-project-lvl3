@@ -14,6 +14,7 @@
   "bugs": {
     "url": "https://github.com/hexlet-boilerplates/webpack-package/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/hexlet-boilerplates/webpack-package#readme",
   "jest": {
     "verbose": true,
