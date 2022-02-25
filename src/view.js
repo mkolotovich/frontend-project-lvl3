@@ -1,4 +1,3 @@
-import has from 'lodash/has.js';
 import onChange from 'on-change';
 import state from './model.js';
 
@@ -6,22 +5,19 @@ const handleProcessError = () => {
   console.log(state.form.processError);
 };
 
-export const renderErrors = (element, errors) => {
-  const fieldName = 'name';
+export const renderErrors = (element, error) => {
   const fieldElement = element.name;
-  const error = errors[fieldName];
-  const fieldHasError = has(errors, fieldName);
-  if (!fieldHasError) {
+  if (error === '') {
     fieldElement.classList.remove('is-invalid');
   } else {
     if (!element.container.querySelector('div')) {
       const feedbackElement = document.createElement('div');
       feedbackElement.classList.add('invalid-feedback');
-      feedbackElement.textContent = errors[fieldName].message;
+      feedbackElement.textContent = error;
       fieldElement.after(feedbackElement);
     } else {
       const feedbackElement = element.container.querySelector('div');
-      feedbackElement.textContent = error.message;
+      feedbackElement.textContent = error;
     }
     fieldElement.classList.add('is-invalid');
   }
