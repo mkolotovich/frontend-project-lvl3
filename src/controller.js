@@ -69,7 +69,7 @@ export default (i18next) => {
               watchedState.form.processError = errorMessages.network.error;
               throw error;
             });
-            // fetch(`https://api.allorigins.ml/get?url=${encodeURIComponent(value)}`)
+          // fetch(`https://api.allorigins.ml/get?url=${encodeURIComponent(value)}`)
         } else if (watchedState.form.feeds.includes(value)) {
           renderErrors(elements, i18next.t('duplicateError'));
         } else {
