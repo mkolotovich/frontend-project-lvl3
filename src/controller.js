@@ -43,24 +43,28 @@ export default (i18next) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
-          axios.get(value)
+          axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent(value)}`)
             .then((response) => {
               renderErrors(elements, '');
               if (!watchedState.form.feeds.includes(value)) {
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(response.data, 'application/xml');
+                const doc = parser.parseFromString(response.data.contents, 'application/xml');
                 console.log(doc);
-                const title = doc.querySelector('title').textContent;
-                const description = doc.querySelector('description').textContent;
-                const items = doc.querySelectorAll('item');
-                watchedState.form.feeds.push(value);
-                const feedId = uniqueId();
-                watchedState.form.feedsDescription.push({ title, description, id: feedId });
-                renderFeeds(title, description);
-                items.forEach((el) => watchedState.form.posts.push({ el, id: uniqueId(`${feedId}_`) }));
-                renderPosts(items);
-                elements.form.reset();
-                elements.name.focus();
+                if (doc.querySelector('parsererror') === null) {
+                  const title = doc.querySelector('title').textContent;
+                  const description = doc.querySelector('description').textContent;
+                  const items = doc.querySelectorAll('item');
+                  watchedState.form.feeds.push(value);
+                  const feedId = uniqueId();
+                  watchedState.form.feedsDescription.push({ title, description, id: feedId });
+                  renderFeeds(title, description);
+                  items.forEach((el) => watchedState.form.posts.push({ el, id: uniqueId(`${feedId}_`) }));
+                  renderPosts(items);
+                  elements.form.reset();
+                  elements.name.focus();
+                } else {
+                  renderErrors(elements, i18next.t('uncorrectRss'));
+                }
               }
             })
             .catch((error) => {
@@ -69,7 +73,6 @@ export default (i18next) => {
               watchedState.form.processError = errorMessages.network.error;
               throw error;
             });
-          // fetch(`https://api.allorigins.ml/get?url=${encodeURIComponent(value)}`)
         } else if (watchedState.form.feeds.includes(value)) {
           renderErrors(elements, i18next.t('duplicateError'));
         } else {

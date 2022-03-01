@@ -11,6 +11,7 @@ export default () => {
         translation: {
           duplicateError: 'RSS уже существует',
           error: 'Ссылка должна быть валидным URL',
+          uncorrectRss: 'Ресурс не содержит валидный RSS',
         },
       },
     },
