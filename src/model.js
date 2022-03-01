@@ -8,5 +8,7 @@ export default {
     fields: {
       name: '',
     },
+    feedsDescription: [],
+    posts: [],
   },
 };

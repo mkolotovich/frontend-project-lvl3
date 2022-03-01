@@ -1,7 +1,10 @@
 import * as yup from 'yup';
 import isEmpty from 'lodash/isEmpty.js';
+import uniqueId from 'lodash/uniqueId.js';
 import axios from 'axios';
-import { watchedState, renderErrors } from './view.js';
+import {
+  watchedState, renderErrors, renderFeeds, renderPosts,
+} from './view.js';
 
 const schema = yup.object().shape({
   name: yup.string().url().trim().required(),
@@ -44,11 +47,21 @@ export default (i18next) => {
             .then((response) => {
               renderErrors(elements, '');
               if (!watchedState.form.feeds.includes(value)) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(response.data, 'application/xml');
+                console.log(doc);
+                const title = doc.querySelector('title').textContent;
+                const description = doc.querySelector('description').textContent;
+                const items = doc.querySelectorAll('item');
                 watchedState.form.feeds.push(value);
+                const feedId = uniqueId();
+                watchedState.form.feedsDescription.push({ title, description, id: feedId });
+                renderFeeds(title, description);
+                items.forEach((el) => watchedState.form.posts.push({ el, id: uniqueId(`${feedId}_`) }));
+                renderPosts(items);
                 elements.form.reset();
                 elements.name.focus();
               }
-              console.log(response);
             })
             .catch((error) => {
               console.log(error);
@@ -56,6 +69,7 @@ export default (i18next) => {
               watchedState.form.processError = errorMessages.network.error;
               throw error;
             });
+            // fetch(`https://api.allorigins.ml/get?url=${encodeURIComponent(value)}`)
         } else if (watchedState.form.feeds.includes(value)) {
           renderErrors(elements, i18next.t('duplicateError'));
         } else {

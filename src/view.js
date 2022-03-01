@@ -5,6 +5,31 @@ const handleProcessError = () => {
   console.log(state.form.processError);
 };
 
+export const renderPosts = (items) => {
+  const list = document.querySelector('.container:last-child .col:first-child ul');
+  items.forEach((el) => {
+    const item = document.createElement('li');
+    item.classList.add('list-group-item', 'border-0');
+    const link = document.createElement('a');
+    link.textContent = el.querySelector('title').textContent;
+    link.href = el.querySelector('link').textContent;
+    item.append(link);
+    list.append(item);
+  });
+};
+
+export const renderFeeds = (title, description) => {
+  const list = document.querySelector('.container:last-child .col:last-child ul');
+  const item = document.createElement('li');
+  item.classList.add('list-group-item', 'border-0');
+  const feedTitle = document.createElement('h3');
+  feedTitle.textContent = title;
+  const feedDescription = document.createElement('p');
+  feedDescription.textContent = description;
+  item.append(feedTitle, feedDescription);
+  list.append(item);
+};
+
 export const renderErrors = (element, error) => {
   const fieldElement = element.name;
   if (error === '') {
