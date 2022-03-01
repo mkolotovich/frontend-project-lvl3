@@ -15,3 +15,6 @@ lint:
 	npx eslint .
 
 .PHONY: test
+
+test-coverage:
+	npm test -- --coverage --coverageProvider=v8
