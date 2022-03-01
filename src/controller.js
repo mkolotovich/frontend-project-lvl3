@@ -10,10 +10,9 @@ const schema = yup.object().shape({
   name: yup.string().url().trim().required(),
 });
 
-const errorMessages = {
-  network: {
-    error: 'Network Problems. Try again.',
-  },
+const parse = (response) => {
+  const parser = new DOMParser();
+  return parser.parseFromString(response, 'application/xml');
 };
 
 const validate = (fields, i18next) => schema.validate(fields, { abortEarly: false })
@@ -43,13 +42,11 @@ export default (i18next) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
-          axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent(value)}`)
+          axios.get(`https://api.allorigins.win/get?disableCache=true&url=${encodeURIComponent(value)}`)
             .then((response) => {
               renderErrors(elements, '');
               if (!watchedState.form.feeds.includes(value)) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(response.data.contents, 'application/xml');
-                console.log(doc);
+                const doc = parse(response.data.contents);
                 if (doc.querySelector('parsererror') === null) {
                   const title = doc.querySelector('title').textContent;
                   const description = doc.querySelector('description').textContent;
@@ -67,11 +64,9 @@ export default (i18next) => {
                 }
               }
             })
-            .catch((error) => {
-              console.log(error);
+            .catch(() => {
               watchedState.form.processState = 'error';
-              watchedState.form.processError = errorMessages.network.error;
-              throw error;
+              renderErrors(elements, i18next.t('networkError'));
             });
         } else if (watchedState.form.feeds.includes(value)) {
           renderErrors(elements, i18next.t('duplicateError'));

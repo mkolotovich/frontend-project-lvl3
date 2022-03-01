@@ -12,6 +12,7 @@ export default () => {
           duplicateError: 'RSS уже существует',
           error: 'Ссылка должна быть валидным URL',
           uncorrectRss: 'Ресурс не содержит валидный RSS',
+          networkError: 'Ошибка сети',
         },
       },
     },
