@@ -41,10 +41,3 @@ jobs:
 
       - name: Run linter
         run: make lint
-
-      - name: 'test'
-        uses: paambaati/codeclimate-action@v2.7.4
-        env: 
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: yarn coverage
