@@ -13,6 +13,7 @@ export default () => {
           error: 'Ссылка должна быть валидным URL',
           uncorrectRss: 'Ресурс не содержит валидный RSS',
           networkError: 'Ошибка сети',
+          success: 'RSS успешно загружен',
         },
       },
     },

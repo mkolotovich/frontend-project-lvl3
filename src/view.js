@@ -14,7 +14,7 @@ export const renderPosts = (items) => {
     link.textContent = el.querySelector('title').textContent;
     link.href = el.querySelector('link').textContent;
     item.append(link);
-    list.append(item);
+    list.prepend(item);
   });
 };
 
@@ -32,18 +32,12 @@ export const renderFeeds = (title, description) => {
 
 export const renderErrors = (element, error) => {
   const fieldElement = element.name;
-  if (error === '') {
+  const message = document.querySelector('.col-10 div:last-child');
+  if (error === 'RSS успешно загружен') {
     fieldElement.classList.remove('is-invalid');
+    message.textContent = error;
   } else {
-    if (!element.container.querySelector('div')) {
-      const feedbackElement = document.createElement('div');
-      feedbackElement.classList.add('invalid-feedback');
-      feedbackElement.textContent = error;
-      fieldElement.after(feedbackElement);
-    } else {
-      const feedbackElement = element.container.querySelector('div');
-      feedbackElement.textContent = error;
-    }
+    message.textContent = error;
     fieldElement.classList.add('is-invalid');
   }
 };
