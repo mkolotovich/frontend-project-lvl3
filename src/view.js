@@ -9,11 +9,16 @@ export const renderPosts = (items) => {
   const list = document.querySelector('.container:last-child .col:first-child ul');
   items.forEach((el) => {
     const item = document.createElement('li');
-    item.classList.add('list-group-item', 'border-0');
+    item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
     const link = document.createElement('a');
     link.textContent = el.querySelector('title').textContent;
     link.href = el.querySelector('link').textContent;
-    item.append(link);
+    link.classList.add('fw-bold');
+    const button = document.createElement('button');
+    button.textContent = 'Просмотр';
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#exampleModal');
+    item.append(link, button);
     list.prepend(item);
   });
 };
@@ -52,6 +57,9 @@ export const watchedState = onChange(state, (path) => {
     case 'form.valid':
       break;
     case 'form.errors':
+      break;
+    case 'form.posts':
+      // renderPosts();
       break;
     default:
       break;

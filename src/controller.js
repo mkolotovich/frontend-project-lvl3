@@ -28,9 +28,9 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
 const addNewPosts = (elements, value, i18next, feedId, posts) => {
   axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${value}`)
     .then((response) => {
+      const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
         renderErrors(elements, i18next.t('success'));
-        const doc = parse(response.data.contents);
         if (doc.querySelector('parsererror') === null) {
           const title = doc.querySelector('title').textContent;
           const description = doc.querySelector('description').textContent;
@@ -40,32 +40,46 @@ const addNewPosts = (elements, value, i18next, feedId, posts) => {
           renderFeeds(title, description);
           items.forEach((el) => {
             const name = el.querySelector('title').textContent;
-            watchedState.form.posts.push({ name, id: uniqueId(`${feedId}_`) });
+            const postDescription = el.querySelector('description').textContent;
+            watchedState.form.posts.push({
+              name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`),
+            });
           });
           renderPosts(Array.from(items).reverse());
+          const modalTitle = document.querySelector('.modal-title');
+          const modalBody = document.querySelector('.modal-body');
+          const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
+          renderedPosts.forEach((el) => {
+            const button = el.querySelector('button');
+            button.addEventListener('click', () => {
+              const link = el.querySelector('a');
+              modalTitle.textContent = link.textContent;
+              link.classList.remove('fw-bold');
+              link.classList.add('fw-normal');
+              const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+              modalBody.textContent = post.postDescription;
+            });
+          });
           elements.form.reset();
           elements.name.focus();
         } else {
           renderErrors(elements, i18next.t('uncorrectRss'));
         }
+      } else if (doc.querySelector('parsererror') === null) {
+        const items = doc.querySelectorAll('item');
+        const newPosts = [];
+        items.forEach((el) => {
+          const name = el.querySelector('title').textContent;
+          newPosts.push({ name, id: uniqueId(`${feedId}_`) });
+        });
+        const res = [...posts, ...newPosts];
+        const result = uniqBy(res, 'name');
+        const newPostsDiff = result.slice(posts.length);
+        newPostsDiff.map((el) => watchedState.form.posts.push(el));
+        renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
+        setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
-        const doc = parse(response.data.contents);
-        if (doc.querySelector('parsererror') === null) {
-          const items = doc.querySelectorAll('item');
-          const newPosts = [];
-          items.forEach((el) => {
-            const name = el.querySelector('title').textContent;
-            newPosts.push({ name, id: uniqueId(`${feedId}_`) });
-          });
-          const res = [...posts, ...newPosts];
-          const result = uniqBy(res, 'name');
-          const newPostsDiff = result.slice(posts.length);
-          newPostsDiff.map((el) => watchedState.form.posts.push(el));
-          renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
-          setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
-        } else {
-          renderErrors(elements, i18next.t('uncorrectRss'));
-        }
+        renderErrors(elements, i18next.t('uncorrectRss'));
       }
     })
     .catch(() => {
@@ -76,10 +90,10 @@ const addNewPosts = (elements, value, i18next, feedId, posts) => {
 
 export default (i18next) => {
   const elements = {
-    container: document.querySelector('.form-floating'),
+    title: document.querySelector('.modal-title'),
     form: document.querySelector('form'),
     name: document.getElementById('floatingInput'),
-    submitButton: document.querySelector('input[type="submit"]'),
+    description: document.querySelector('.modal-body'),
   };
   elements.name.focus();
   elements.form.addEventListener('submit', (e) => {
