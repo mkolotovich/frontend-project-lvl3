@@ -26,7 +26,7 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
   });
 
 const addNewPosts = (elements, value, i18next, feedId, posts) => {
-  axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${value}`)
+  axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`)
     .then((response) => {
       const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
