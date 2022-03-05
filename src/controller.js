@@ -94,10 +94,12 @@ export default (i18next) => {
     form: document.querySelector('form'),
     name: document.getElementById('floatingInput'),
     description: document.querySelector('.modal-body'),
+    submit: document.querySelector('.w-100'),
   };
   elements.name.focus();
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
+    elements.submit.disabled = true;
     const input = elements.form.elements.url;
     const { value } = input;
     watchedState.form.fields.name = value;
@@ -115,6 +117,7 @@ export default (i18next) => {
           renderErrors(elements, errors);
         }
       });
+    elements.submit.disabled = false;
     watchedState.form.processState = 'sent';
   });
 };
