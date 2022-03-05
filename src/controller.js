@@ -98,7 +98,7 @@ export default (i18next) => {
   elements.name.focus();
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const input = e.target[0];
+    const input = elements.form.elements.url;
     const { value } = input;
     watchedState.form.fields.name = value;
     validate(watchedState.form.fields, i18next)
