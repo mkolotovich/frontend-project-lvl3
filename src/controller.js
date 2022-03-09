@@ -3,9 +3,9 @@ import isEmpty from 'lodash/isEmpty.js';
 import uniqueId from 'lodash/uniqueId.js';
 import uniqBy from 'lodash/uniqBy.js';
 import axios from 'axios';
-import {
-  watchedState, renderErrors, renderFeeds, renderPosts,
-} from './view.js';
+// import {
+//   watchedState, renderErrors, renderFeeds, renderPosts,
+// } from './view.js';
 
 const schema = yup.object().shape({
   name: yup.string().url().trim().required(),
@@ -25,27 +25,30 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
     return messages;
   });
 
-const addNewPosts = (elements, value, i18next, feedId, posts) => {
+// const addNewPosts = (elements, value, i18next, feedId, posts) => {
+const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
   axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`)
     .then((response) => {
       const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
-        renderErrors(elements, i18next.t('success'));
+        // renderErrors(elements, i18next.t('success'));
         if (doc.querySelector('parsererror') === null) {
           const title = doc.querySelector('title').textContent;
           const description = doc.querySelector('description').textContent;
           const items = doc.querySelectorAll('item');
           watchedState.form.feeds.push(value);
           watchedState.form.feedsDescription.push({ title, description, id: feedId });
-          renderFeeds(title, description);
+          // renderFeeds(title, description);
           items.forEach((el) => {
             const name = el.querySelector('title').textContent;
             const postDescription = el.querySelector('description').textContent;
+            const link = el.querySelector('link').textContent;
             watchedState.form.posts.push({
-              name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`),
+              // name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`),
+              name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`, link),
             });
           });
-          renderPosts(Array.from(items).reverse());
+          // renderPosts(Array.from(items).reverse());
           const modalTitle = document.querySelector('.modal-title');
           const modalBody = document.querySelector('.modal-body');
           const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
@@ -63,7 +66,7 @@ const addNewPosts = (elements, value, i18next, feedId, posts) => {
           elements.form.reset();
           elements.name.focus();
         } else {
-          renderErrors(elements, i18next.t('uncorrectRss'));
+          // renderErrors(elements, i18next.t('uncorrectRss'));
         }
       } else if (doc.querySelector('parsererror') === null) {
         const items = doc.querySelectorAll('item');
@@ -76,19 +79,20 @@ const addNewPosts = (elements, value, i18next, feedId, posts) => {
         const result = uniqBy(res, 'name');
         const newPostsDiff = result.slice(posts.length);
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
-        renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
+        // renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
         setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
-        renderErrors(elements, i18next.t('uncorrectRss'));
+        // renderErrors(elements, i18next.t('uncorrectRss'));
       }
     })
     .catch(() => {
-      watchedState.form.processState = 'error';
-      renderErrors(elements, i18next.t('networkError'));
+      // watchedState.form.processState = 'error';
+      // renderErrors(elements, i18next.t('networkError'));
     });
 };
 
-export default (i18next) => {
+// export default (i18next) => {
+export default (i18next, state) => {
   const elements = {
     title: document.querySelector('.modal-title'),
     form: document.querySelector('form'),
@@ -102,6 +106,7 @@ export default (i18next) => {
     elements.submit.disabled = true;
     const input = elements.form.elements.url;
     const { value } = input;
+    const watchedState = state;
     watchedState.form.fields.name = value;
     validate(watchedState.form.fields, i18next)
       .then((errors) => {
@@ -109,12 +114,14 @@ export default (i18next) => {
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
           const feedId = uniqueId();
-          addNewPosts(elements, value, i18next, feedId);
+          // addNewPosts(elements, value, i18next, feedId);
+          addNewPosts(watchedState, elements, value, i18next, feedId);
           setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
         } else if (watchedState.form.feeds.includes(value)) {
-          renderErrors(elements, i18next.t('duplicateError'));
+          // renderErrors(elements, i18next.t('duplicateError'));
+          watchedState.form.processError = 'duplicateError';
         } else {
-          renderErrors(elements, errors);
+          // renderErrors(elements, errors);
         }
       });
     elements.submit.disabled = false;
