@@ -27,6 +27,7 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
 
 // const addNewPosts = (elements, value, i18next, feedId, posts) => {
 const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
+  console.log(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${value}`);
   axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`)
     .then((response) => {
       const doc = parse(response.data.contents);
@@ -80,7 +81,9 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
         const newPostsDiff = result.slice(posts.length);
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
         // renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
-        setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
+        // setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
+        setTimeout(addNewPosts, 5000,
+          watchedState, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
         // renderErrors(elements, i18next.t('uncorrectRss'));
       }
@@ -116,7 +119,8 @@ export default (i18next, state) => {
           const feedId = uniqueId();
           // addNewPosts(elements, value, i18next, feedId);
           addNewPosts(watchedState, elements, value, i18next, feedId);
-          setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
+          setTimeout(addNewPosts, 5000,
+            watchedState, elements, value, i18next, feedId, watchedState.form.posts);
         } else if (watchedState.form.feeds.includes(value)) {
           // renderErrors(elements, i18next.t('duplicateError'));
           watchedState.form.processError = 'duplicateError';
