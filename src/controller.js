@@ -120,8 +120,8 @@ export default (i18next, state) => {
           const feedId = uniqueId();
           // addNewPosts(elements, value, i18next, feedId);
           addNewPosts(watchedState, elements, value, i18next, feedId);
-          setTimeout(addNewPosts, 5000,
-            watchedState, elements, value, i18next, feedId, watchedState.form.posts);
+          // setTimeout(addNewPosts, 5000,
+          //   watchedState, elements, value, i18next, feedId, watchedState.form.posts);
         } else {
           console.log(watchedState.form.feeds);
           // renderErrors(elements, errors);
