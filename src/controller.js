@@ -64,7 +64,7 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
               modalBody.textContent = post.postDescription;
             });
           });
-          elements.form.reset();
+          // elements.form.reset();
           elements.name.focus();
         } else {
           // renderErrors(elements, i18next.t('uncorrectRss'));
@@ -82,8 +82,6 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
         // renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
         // setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
-        elements.form.reset();
-        elements.name.focus();
         setTimeout(addNewPosts, 5000,
           watchedState, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
