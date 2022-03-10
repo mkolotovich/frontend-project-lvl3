@@ -116,17 +116,21 @@ export default (i18next, state) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
+          console.log(watchedState.form.feeds);
           const feedId = uniqueId();
           // addNewPosts(elements, value, i18next, feedId);
           addNewPosts(watchedState, elements, value, i18next, feedId);
           setTimeout(addNewPosts, 5000,
             watchedState, elements, value, i18next, feedId, watchedState.form.posts);
-        } else if (watchedState.form.feeds.includes(value)) {
-          // renderErrors(elements, i18next.t('duplicateError'));
-          watchedState.form.processError = 'duplicateError';
         } else {
+          console.log(watchedState.form.feeds);
           // renderErrors(elements, errors);
+          watchedState.form.processError = 'duplicateError';
         }
+        // else if (watchedState.form.feeds.includes(value)) {
+        // renderErrors(elements, i18next.t('duplicateError'));
+        // watchedState.form.processError = 'duplicateError';
+        // }
       });
     elements.submit.disabled = false;
     watchedState.form.processState = 'sent';
