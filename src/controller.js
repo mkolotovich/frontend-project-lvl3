@@ -3,9 +3,6 @@ import isEmpty from 'lodash/isEmpty.js';
 import uniqueId from 'lodash/uniqueId.js';
 import uniqBy from 'lodash/uniqBy.js';
 import axios from 'axios';
-// import {
-//   watchedState, renderErrors, renderFeeds, renderPosts,
-// } from './view.js';
 
 const schema = yup.object().shape({
   name: yup.string().url().trim().required(),
@@ -25,9 +22,7 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
     return messages;
   });
 
-// const addNewPosts = (elements, value, i18next, feedId, posts) => {
 const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
-  console.log(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${value}`);
   axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`)
     .then((response) => {
       const doc = parse(response.data.contents);
@@ -85,12 +80,12 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
         setTimeout(addNewPosts, 5000,
           watchedState, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
-        // renderErrors(elements, i18next.t('uncorrectRss'));
+      // renderErrors(elements, i18next.t('uncorrectRss'));
       }
     })
     .catch(() => {
-      // watchedState.form.processState = 'error';
-      // renderErrors(elements, i18next.t('networkError'));
+      //   watchedState.form.processState = 'error';
+      //   renderErrors(elements, i18next.t('networkError'));
     });
 };
 
@@ -103,7 +98,7 @@ export default (i18next, state) => {
     description: document.querySelector('.modal-body'),
     submit: document.querySelector('.w-100'),
   };
-  elements.name.focus();
+  // elements.name.focus();
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     elements.submit.disabled = true;
@@ -111,26 +106,36 @@ export default (i18next, state) => {
     const { value } = input;
     const watchedState = state;
     watchedState.form.fields.name = value;
+    let correctValue;
     validate(watchedState.form.fields, i18next)
       .then((errors) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
-        if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
-          console.log(watchedState.form.feeds);
+        if (value.lastIndexOf('http') !== 0) {
+          correctValue = value.slice(0, value.lastIndexOf('http'));
+        } else {
+          correctValue = value;
+        }
+        // if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
+        if (watchedState.form.valid && !watchedState.form.feeds.includes(correctValue)) {
+          console.log('validRss');
+          // console.log(watchedState.form.feeds);
           const feedId = uniqueId();
           // addNewPosts(elements, value, i18next, feedId);
-          addNewPosts(watchedState, elements, value, i18next, feedId);
-          // setTimeout(addNewPosts, 5000,
-          //   watchedState, elements, value, i18next, feedId, watchedState.form.posts);
+          // addNewPosts(watchedState, elements, value, i18next, feedId);
+          addNewPosts(watchedState, elements, correctValue, i18next, feedId);
+          setTimeout(addNewPosts, 5000,
+            watchedState, elements, value, i18next, feedId, watchedState.form.posts);
+        // } else if (watchedState.form.feeds.includes(value)) {
+        } else if (watchedState.form.feeds.includes(correctValue)) {
+          console.log('duplicateError');
+          // renderErrors(elements, i18next.t('duplicateError'));
+          watchedState.form.processError = 'duplicateError';
         } else {
-          console.log(watchedState.form.feeds);
+          console.log('inValidRss');
           // renderErrors(elements, errors);
           watchedState.form.processError = 'duplicateError';
         }
-        // else if (watchedState.form.feeds.includes(value)) {
-        // renderErrors(elements, i18next.t('duplicateError'));
-        // watchedState.form.processError = 'duplicateError';
-        // }
       });
     elements.submit.disabled = false;
     watchedState.form.processState = 'sent';
