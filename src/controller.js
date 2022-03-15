@@ -58,7 +58,8 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
           });
           elements.name.focus();
         } else {
-          // renderErrors(elements, i18next.t('uncorrectRss'));
+          const state = watchedState;
+          state.form.processError = 'uncorrectRss';
         }
       } else if (doc.querySelector('parsererror') === null) {
         const items = doc.querySelectorAll('item');

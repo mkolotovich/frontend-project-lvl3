@@ -42,6 +42,8 @@ export default () => {
           renderErrors(element, i18nextInstance.t('duplicateError'));
         } else if (value === 'Ссылка должна быть валидным URL') {
           renderErrors(element, i18nextInstance.t('error'));
+        } else if (value === 'uncorrectRss') {
+          renderErrors(element, i18nextInstance.t('uncorrectRss'));
         }
         break;
       case 'form.posts': {
