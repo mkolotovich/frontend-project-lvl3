@@ -80,8 +80,8 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
       }
     })
     .catch(() => {
-      //   watchedState.form.processState = 'error';
-      //   renderErrors(elements, i18next.t('networkError'));
+      const state = watchedState;
+      state.form.processError = 'networkError';
     });
 };
 

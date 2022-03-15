@@ -44,6 +44,8 @@ export default () => {
           renderErrors(element, i18nextInstance.t('error'));
         } else if (value === 'uncorrectRss') {
           renderErrors(element, i18nextInstance.t('uncorrectRss'));
+        } else if (value === 'networkError') {
+          renderErrors(element, i18nextInstance.t('networkError'));
         }
         break;
       case 'form.posts': {
