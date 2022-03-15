@@ -2,7 +2,6 @@ import i18next from 'i18next';
 import onChange from 'on-change';
 import last from 'lodash/last.js';
 import runApp from './controller.js';
-// import view from './view.js';
 import { renderErrors, renderPosts, renderFeeds } from './view.js';
 
 export default () => {
@@ -35,17 +34,15 @@ export default () => {
       },
     },
   });
-  const watchedState = onChange(state, (path) => {
+  const watchedState = onChange(state, (path, value) => {
     const element = document.getElementById('floatingInput');
     switch (path) {
-      case 'form.processState':
-        break;
       case 'form.processError':
-        renderErrors(element, i18nextInstance.t('duplicateError'));
-        break;
-      case 'form.valid':
-        break;
-      case 'form.errors':
+        if (value === 'duplicateError') {
+          renderErrors(element, i18nextInstance.t('duplicateError'));
+        } else if (value === 'Ссылка должна быть валидным URL') {
+          renderErrors(element, i18nextInstance.t('error'));
+        }
         break;
       case 'form.posts': {
         const item = last(watchedState.form.posts);
@@ -64,10 +61,5 @@ export default () => {
         break;
     }
   });
-  // return [state, i18nextInstance];
-  // view(state, i18nextInstance);
-  // runApp(i18nextInstance, view(state, i18nextInstance));
   runApp(i18nextInstance, watchedState);
-  // runApp(i18nextInstance, state);
-  // runApp(i18nextInstance);
 };

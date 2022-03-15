@@ -27,20 +27,17 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
     .then((response) => {
       const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
-        // renderErrors(elements, i18next.t('success'));
         if (doc.querySelector('parsererror') === null) {
           const title = doc.querySelector('title').textContent;
           const description = doc.querySelector('description').textContent;
           const items = doc.querySelectorAll('item');
           watchedState.form.feeds.push(value);
           watchedState.form.feedsDescription.push({ title, description, id: feedId });
-          // renderFeeds(title, description);
           items.forEach((el) => {
             const name = el.querySelector('title').textContent;
             const postDescription = el.querySelector('description').textContent;
             const link = el.querySelector('link').textContent;
             watchedState.form.posts.push({
-              // name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`),
               name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`, link),
             });
           });
@@ -59,7 +56,6 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
               modalBody.textContent = post.postDescription;
             });
           });
-          // elements.form.reset();
           elements.name.focus();
         } else {
           // renderErrors(elements, i18next.t('uncorrectRss'));
@@ -76,7 +72,6 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
         const newPostsDiff = result.slice(posts.length);
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
         // renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
-        // setTimeout(addNewPosts, 5000, elements, value, i18next, feedId, watchedState.form.posts);
         setTimeout(addNewPosts, 5000,
           watchedState, elements, value, i18next, feedId, watchedState.form.posts);
       } else {
@@ -89,7 +84,6 @@ const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
     });
 };
 
-// export default (i18next) => {
 export default (i18next, state) => {
   const elements = {
     title: document.querySelector('.modal-title'),
@@ -98,7 +92,6 @@ export default (i18next, state) => {
     description: document.querySelector('.modal-body'),
     submit: document.querySelector('.w-100'),
   };
-  // elements.name.focus();
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     elements.submit.disabled = true;
@@ -116,25 +109,15 @@ export default (i18next, state) => {
         } else {
           correctValue = value;
         }
-        // if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
         if (watchedState.form.valid && !watchedState.form.feeds.includes(correctValue)) {
-          console.log('validRss');
-          // console.log(watchedState.form.feeds);
           const feedId = uniqueId();
-          // addNewPosts(elements, value, i18next, feedId);
-          // addNewPosts(watchedState, elements, value, i18next, feedId);
           addNewPosts(watchedState, elements, correctValue, i18next, feedId);
           setTimeout(addNewPosts, 5000,
             watchedState, elements, value, i18next, feedId, watchedState.form.posts);
-        // } else if (watchedState.form.feeds.includes(value)) {
         } else if (watchedState.form.feeds.includes(correctValue)) {
-          console.log('duplicateError');
-          // renderErrors(elements, i18next.t('duplicateError'));
           watchedState.form.processError = 'duplicateError';
         } else {
-          console.log('inValidRss');
-          // renderErrors(elements, errors);
-          watchedState.form.processError = 'duplicateError';
+          watchedState.form.processError = `${errors}`;
         }
       });
     elements.submit.disabled = false;
