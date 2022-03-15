@@ -43,3 +43,17 @@ export const renderErrors = (element, error) => {
     element.classList.add('is-invalid');
   }
 };
+
+export const blockUi = () => {
+  const submit = document.querySelector('.w-100');
+  const input = document.getElementById('floatingInput');
+  submit.disabled = true;
+  input.setAttribute('readonly', 'true');
+};
+
+export const unBlockUi = () => {
+  const submit = document.querySelector('.w-100');
+  const input = document.getElementById('floatingInput');
+  submit.disabled = false;
+  input.removeAttribute('readonly');
+};

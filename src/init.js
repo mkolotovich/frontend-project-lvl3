@@ -2,7 +2,9 @@ import i18next from 'i18next';
 import onChange from 'on-change';
 import last from 'lodash/last.js';
 import runApp from './controller.js';
-import { renderErrors, renderPosts, renderFeeds } from './view.js';
+import {
+  renderErrors, renderPosts, renderFeeds, blockUi, unBlockUi,
+} from './view.js';
 
 export default () => {
   const i18nextInstance = i18next.createInstance();
@@ -61,6 +63,13 @@ export default () => {
         renderFeeds(title, description);
         break;
       }
+      case 'form.processState':
+        if (value === 'sending') {
+          blockUi();
+        } else if (value === 'sent') {
+          unBlockUi();
+        }
+        break;
       default:
         break;
     }
