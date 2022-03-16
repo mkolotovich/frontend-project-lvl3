@@ -57,7 +57,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
               modalBody.textContent = post.postDescription;
             });
           });
-          elements.name.focus();
+          // elements.name.focus();
         } else {
           watchedState.form.processError = 'uncorrectRss';
           watchedState.form.processState = 'sent';
@@ -96,23 +96,14 @@ export default (i18next, state) => {
     const watchedState = state;
     const { posts } = watchedState.form;
     watchedState.form.fields.name = value;
-    // let correctValue;
     validate(watchedState.form.fields, i18next)
       .then((errors) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
-        // if (value.lastIndexOf('http') !== 0) {
-        //   correctValue = value.slice(0, value.lastIndexOf('http'));
-        // } else {
-        //   correctValue = value;
-        // }
-        // if (watchedState.form.valid && !watchedState.form.feeds.includes(correctValue)) {
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
           const feedId = uniqueId();
-          // addNewPosts(watchedState, elements, correctValue, i18next, feedId);
           addNewPosts(watchedState, elements, value, i18next, feedId);
           setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
-        // } else if (watchedState.form.feeds.includes(correctValue)) {
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';
         } else {

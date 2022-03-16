@@ -24,8 +24,6 @@ export const renderFeeds = (title, description) => {
   feedDescription.textContent = description;
   item.append(feedTitle, feedDescription);
   list.append(item);
-  // const form = document.querySelector('form');
-  // form.reset();
 };
 
 export const renderErrors = (element, error) => {
@@ -52,4 +50,5 @@ export const unBlockUi = () => {
   submit.disabled = false;
   input.removeAttribute('readonly');
   input.value = '';
+  input.focus();
 };
