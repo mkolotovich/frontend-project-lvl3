@@ -33,6 +33,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
           const description = doc.querySelector('description').textContent;
           const items = doc.querySelectorAll('item');
           watchedState.form.feeds.push(value);
+          watchedState.form.processState = 'sent';
           watchedState.form.feedsDescription.push({ title, description, id: feedId });
           items.forEach((el) => {
             const name = el.querySelector('title').textContent;
