@@ -61,6 +61,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
           elements.name.focus();
         } else {
           watchedState.form.processError = 'uncorrectRss';
+          watchedState.form.processState = 'sent';
         }
       } else if (doc.querySelector('parsererror') === null) {
         const items = doc.querySelectorAll('item');
@@ -119,7 +120,6 @@ export default (i18next, state) => {
         } else {
           watchedState.form.processError = `${errors}`;
         }
-        watchedState.form.processState = 'sent';
       });
   });
 };
