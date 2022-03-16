@@ -1,12 +1,9 @@
 export const renderPosts = (el) => {
   const list = document.querySelector('.container:last-child .col:first-child ul');
-  // items.forEach((el) => {
   const item = document.createElement('li');
   item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
   const link = document.createElement('a');
-  // link.textContent = el.querySelector('title').textContent;
   link.textContent = el.name;
-  // link.href = el.querySelector('link').textContent;
   link.href = el.link;
   link.classList.add('fw-bold');
   const button = document.createElement('button');
@@ -14,9 +11,7 @@ export const renderPosts = (el) => {
   button.setAttribute('data-bs-toggle', 'modal');
   button.setAttribute('data-bs-target', '#exampleModal');
   item.append(link, button);
-  // list.prepend(item);
   list.append(item);
-  // });
 };
 
 export const renderFeeds = (title, description) => {
@@ -29,8 +24,8 @@ export const renderFeeds = (title, description) => {
   feedDescription.textContent = description;
   item.append(feedTitle, feedDescription);
   list.append(item);
-  const form = document.querySelector('form');
-  form.reset();
+  // const form = document.querySelector('form');
+  // form.reset();
 };
 
 export const renderErrors = (element, error) => {
@@ -56,4 +51,5 @@ export const unBlockUi = () => {
   const input = document.getElementById('floatingInput');
   submit.disabled = false;
   input.removeAttribute('readonly');
+  input.value = '';
 };
