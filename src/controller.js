@@ -43,7 +43,6 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
               name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`, link),
             });
           });
-          // renderPosts(Array.from(items).reverse());
           const modalTitle = document.querySelector('.modal-title');
           const modalBody = document.querySelector('.modal-body');
           const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
@@ -74,11 +73,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
         const result = uniqBy(res, 'name');
         const newPostsDiff = result.slice(posts.length);
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
-        // renderPosts(Array.from(items).slice(0, newPostsDiff.length).reverse());
-        setTimeout(addNewPosts, 5000,
-          watchedState, elements, value, i18next, feedId, watchedState.form.posts);
-      } else {
-      // renderErrors(elements, i18next.t('uncorrectRss'));
+        setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
       }
     })
     .catch(() => {
@@ -99,6 +94,7 @@ export default (i18next, state) => {
     const input = elements.form.elements.url;
     const { value } = input;
     const watchedState = state;
+    const { posts } = watchedState.form;
     watchedState.form.fields.name = value;
     let correctValue;
     validate(watchedState.form.fields, i18next)
@@ -113,8 +109,7 @@ export default (i18next, state) => {
         if (watchedState.form.valid && !watchedState.form.feeds.includes(correctValue)) {
           const feedId = uniqueId();
           addNewPosts(watchedState, elements, correctValue, i18next, feedId);
-          setTimeout(addNewPosts, 5000,
-            watchedState, elements, value, i18next, feedId, watchedState.form.posts);
+          setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
         } else if (watchedState.form.feeds.includes(correctValue)) {
           watchedState.form.processError = 'duplicateError';
         } else {

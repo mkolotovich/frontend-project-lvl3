@@ -17,3 +17,5 @@ extends:
 rules:
   no-console: 0
   import/extensions: 0
+  function-paren-newline: ["error", "multiline-arguments"]
+  function-call-argument-newline: ["error", "never"]
