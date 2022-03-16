@@ -22,10 +22,9 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
     return messages;
   });
 
-// const addNewPosts = (watchedState, elements, value, i18next, feedId, posts) => {
 const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
   const watchedState = state;
-  axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`)
+  axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(value)}`)
     .then((response) => {
       const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
@@ -34,7 +33,6 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
           const description = doc.querySelector('description').textContent;
           const items = doc.querySelectorAll('item');
           watchedState.form.feeds.push(value);
-          watchedState.form.processState = 'sent';
           watchedState.form.feedsDescription.push({ title, description, id: feedId });
           items.forEach((el) => {
             const name = el.querySelector('title').textContent;
@@ -61,8 +59,6 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
           });
           elements.name.focus();
         } else {
-          // const state = watchedState;
-          // state.form.processError = 'uncorrectRss';
           watchedState.form.processError = 'uncorrectRss';
         }
       } else if (doc.querySelector('parsererror') === null) {
@@ -84,8 +80,6 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
       }
     })
     .catch(() => {
-      // const state = watchedState;
-      // state.form.processError = 'networkError';
       watchedState.form.processError = 'networkError';
     });
 };
@@ -100,7 +94,6 @@ export default (i18next, state) => {
   };
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    // elements.submit.disabled = true;
     const input = elements.form.elements.url;
     const { value } = input;
     const watchedState = state;
@@ -125,8 +118,7 @@ export default (i18next, state) => {
         } else {
           watchedState.form.processError = `${errors}`;
         }
+        watchedState.form.processState = 'sent';
       });
-    // elements.submit.disabled = false;
-    // watchedState.form.processState = 'sent';
   });
 };
