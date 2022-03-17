@@ -57,10 +57,10 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
               modalBody.textContent = post.postDescription;
             });
           });
-          // elements.name.focus();
         } else {
           watchedState.form.processError = 'uncorrectRss';
-          watchedState.form.processState = 'sent';
+          // watchedState.form.processState = 'sent';
+          watchedState.form.processState = 'error';
         }
       } else if (doc.querySelector('parsererror') === null) {
         const items = doc.querySelectorAll('item');
@@ -78,6 +78,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
     })
     .catch(() => {
       watchedState.form.processError = 'networkError';
+      watchedState.form.processState = 'error';
     });
 };
 
@@ -106,8 +107,10 @@ export default (i18next, state) => {
           setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';
+          watchedState.form.processState = 'error';
         } else {
           watchedState.form.processError = `${errors}`;
+          watchedState.form.processState = 'error';
         }
       });
   });

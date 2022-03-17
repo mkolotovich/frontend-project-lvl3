@@ -26,7 +26,8 @@ export const renderFeeds = (title, description) => {
   list.append(item);
 };
 
-export const renderErrors = (element, error) => {
+// export const renderErrors = (element, error) => {
+export const renderState = (element, error) => {
   const message = document.querySelector('.col-10 div:last-child');
   if (error === 'RSS успешно загружен') {
     element.classList.remove('is-invalid');

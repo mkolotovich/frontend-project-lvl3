@@ -3,7 +3,8 @@ import onChange from 'on-change';
 import last from 'lodash/last.js';
 import runApp from './controller.js';
 import {
-  renderErrors, renderPosts, renderFeeds, blockUi, unBlockUi,
+  // renderErrors, renderPosts, renderFeeds, blockUi, unBlockUi,
+  renderState, renderPosts, renderFeeds, blockUi, unBlockUi,
 } from './view.js';
 
 export default () => {
@@ -36,27 +37,39 @@ export default () => {
       },
     },
   });
+  const handleError = (element, error) => {
+    if (error === 'duplicateError') {
+      renderState(element, i18nextInstance.t('duplicateError'));
+    } else if (error === 'Ссылка должна быть валидным URL') {
+      renderState(element, i18nextInstance.t('error'));
+    } else if (error === 'uncorrectRss') {
+      renderState(element, i18nextInstance.t('uncorrectRss'));
+    } else if (error === 'networkError') {
+      renderState(element, i18nextInstance.t('networkError'));
+    }
+  };
   const watchedState = onChange(state, (path, value) => {
     const element = document.getElementById('floatingInput');
     switch (path) {
-      case 'form.processError':
-        if (value === 'duplicateError') {
-          renderErrors(element, i18nextInstance.t('duplicateError'));
-        } else if (value === 'Ссылка должна быть валидным URL') {
-          renderErrors(element, i18nextInstance.t('error'));
-        } else if (value === 'uncorrectRss') {
-          renderErrors(element, i18nextInstance.t('uncorrectRss'));
-        } else if (value === 'networkError') {
-          renderErrors(element, i18nextInstance.t('networkError'));
-        }
-        break;
+      // case 'form.processError':
+      // if (value === 'duplicateError') {
+      // renderErrors(element, i18nextInstance.t('duplicateError'));
+      // } else if (value === 'Ссылка должна быть валидным URL') {
+      // renderErrors(element, i18nextInstance.t('error'));
+      // } else if (value === 'uncorrectRss') {
+      // renderErrors(element, i18nextInstance.t('uncorrectRss'));
+      // } else if (value === 'networkError') {
+      // renderErrors(element, i18nextInstance.t('networkError'));
+      // }
+      // break;
       case 'form.posts': {
         const item = last(watchedState.form.posts);
         renderPosts(item);
         break;
       }
       case 'form.feeds':
-        renderErrors(element, i18nextInstance.t('success'));
+        // renderErrors(element, i18nextInstance.t('success'));
+        renderState(element, i18nextInstance.t('success'));
         break;
       case 'form.feedsDescription': {
         const { title, description } = last(watchedState.form.feedsDescription);
@@ -67,6 +80,9 @@ export default () => {
         if (value === 'sending') {
           blockUi();
         } else if (value === 'sent') {
+          unBlockUi();
+        } else if (value === 'error') {
+          handleError(element, watchedState.form.processError);
           unBlockUi();
         }
         break;
