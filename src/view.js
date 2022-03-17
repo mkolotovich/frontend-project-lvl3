@@ -14,6 +14,17 @@ export const renderPosts = (el) => {
   list.append(item);
 };
 
+export const renderModal = (post, el) => {
+  const modalTitle = document.querySelector('.modal-title');
+  const modalBody = document.querySelector('.modal-body');
+  const link = el.querySelector('a');
+  modalTitle.textContent = post.name;
+  link.classList.remove('fw-bold');
+  link.classList.add('fw-normal');
+  // const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+  modalBody.textContent = post.postDescription;
+};
+
 export const renderFeeds = (title, description) => {
   const list = document.querySelector('.container:last-child .col:last-child ul');
   const item = document.createElement('li');
@@ -26,7 +37,6 @@ export const renderFeeds = (title, description) => {
   list.append(item);
 };
 
-// export const renderErrors = (element, error) => {
 export const renderState = (element, error) => {
   const message = document.querySelector('.col-10 div:last-child');
   if (error === 'RSS успешно загружен') {

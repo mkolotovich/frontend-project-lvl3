@@ -40,26 +40,37 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
             const postDescription = el.querySelector('description').textContent;
             const link = el.querySelector('link').textContent;
             watchedState.form.posts.push({
-              name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`, link),
+              // name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`, link),
+              name, postDescription, isReaded: false, id: uniqueId(`${feedId}_`), link,
             });
           });
-          const modalTitle = document.querySelector('.modal-title');
-          const modalBody = document.querySelector('.modal-body');
+          // const modalTitle = document.querySelector('.modal-title');
+          // const modalBody = document.querySelector('.modal-body');
+          // const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
+          // renderedPosts.forEach((el) => {
+          //   const button = el.querySelector('button');
+          //   button.addEventListener('click', () => {
+          //     const link = el.querySelector('a');
+          //     modalTitle.textContent = link.textContent;
+          //     link.classList.remove('fw-bold');
+          //     link.classList.add('fw-normal');
+          //     const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+          //     modalBody.textContent = post.postDescription;
+          //   });
+          // });
           const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
           renderedPosts.forEach((el) => {
             const button = el.querySelector('button');
             button.addEventListener('click', () => {
               const link = el.querySelector('a');
-              modalTitle.textContent = link.textContent;
-              link.classList.remove('fw-bold');
-              link.classList.add('fw-normal');
-              const post = watchedState.form.posts.find((item) => item.name === link.textContent);
-              modalBody.textContent = post.postDescription;
+              // const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+              const post = posts.find((item) => item.name === link.textContent);
+              watchedState.form.currentNode = el;
+              post.isReaded = true;
             });
           });
         } else {
           watchedState.form.processError = 'uncorrectRss';
-          // watchedState.form.processState = 'sent';
           watchedState.form.processState = 'error';
         }
       } else if (doc.querySelector('parsererror') === null) {
@@ -82,7 +93,8 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
     });
 };
 
-export default (i18next, state) => {
+// export default (i18next, state) => {
+export default (i18next, state, watchedPosts) => {
   const elements = {
     title: document.querySelector('.modal-title'),
     form: document.querySelector('form'),
@@ -103,7 +115,8 @@ export default (i18next, state) => {
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
           const feedId = uniqueId();
-          addNewPosts(watchedState, elements, value, i18next, feedId);
+          // addNewPosts(watchedState, elements, value, i18next, feedId);
+          addNewPosts(watchedState, elements, value, i18next, feedId, watchedPosts);
           setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';

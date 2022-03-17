@@ -3,8 +3,8 @@ import onChange from 'on-change';
 import last from 'lodash/last.js';
 import runApp from './controller.js';
 import {
-  // renderErrors, renderPosts, renderFeeds, blockUi, unBlockUi,
-  renderState, renderPosts, renderFeeds, blockUi, unBlockUi,
+  // renderState, renderPosts, renderFeeds, blockUi, unBlockUi,
+  renderState, renderPosts, renderFeeds, renderModal, blockUi, unBlockUi,
 } from './view.js';
 
 export default () => {
@@ -15,7 +15,8 @@ export default () => {
       valid: true,
       processState: 'filling',
       processError: null,
-      errors: {},
+      // errors: {},
+      currentNode: {},
       fields: {
         name: '',
       },
@@ -48,27 +49,19 @@ export default () => {
       renderState(element, i18nextInstance.t('networkError'));
     }
   };
+  const watchedPosts = onChange(state.form.posts, (path) => {
+    const [index] = path.split('.');
+    renderModal(state.form.posts[index], state.form.currentNode);
+  });
   const watchedState = onChange(state, (path, value) => {
     const element = document.getElementById('floatingInput');
     switch (path) {
-      // case 'form.processError':
-      // if (value === 'duplicateError') {
-      // renderErrors(element, i18nextInstance.t('duplicateError'));
-      // } else if (value === 'Ссылка должна быть валидным URL') {
-      // renderErrors(element, i18nextInstance.t('error'));
-      // } else if (value === 'uncorrectRss') {
-      // renderErrors(element, i18nextInstance.t('uncorrectRss'));
-      // } else if (value === 'networkError') {
-      // renderErrors(element, i18nextInstance.t('networkError'));
-      // }
-      // break;
       case 'form.posts': {
         const item = last(watchedState.form.posts);
         renderPosts(item);
         break;
       }
       case 'form.feeds':
-        // renderErrors(element, i18nextInstance.t('success'));
         renderState(element, i18nextInstance.t('success'));
         break;
       case 'form.feedsDescription': {
@@ -90,5 +83,6 @@ export default () => {
         break;
     }
   });
-  runApp(i18nextInstance, watchedState);
+  // runApp(i18nextInstance, watchedState);
+  runApp(i18nextInstance, watchedState, watchedPosts);
 };
