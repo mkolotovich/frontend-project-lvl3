@@ -13,12 +13,15 @@ const parse = (response) => {
   return parser.parseFromString(response, 'application/xml');
 };
 
-const validate = (fields, i18next) => schema.validate(fields, { abortEarly: false })
+// const validate = (fields, i18next) => schema.validate(fields, { abortEarly: false })
+const validate = (fields) => schema.validate(fields, { abortEarly: false })
   .then(() => {
     const obj = {};
     return obj;
-  }).catch((err) => {
-    const messages = err.errors.map(() => i18next.t('error'));
+  // }).catch((err) => {
+  }).catch(() => {
+    // const messages = err.errors.map(() => i18next.t('error'));
+    const messages = 'invalidUrl';
     return messages;
   });
 
@@ -85,7 +88,8 @@ export default (i18next, state, watchedPosts) => {
     const { value } = input;
     const watchedState = state;
     watchedState.form.fields.name = value;
-    validate(watchedState.form.fields, i18next)
+    // validate(watchedState.form.fields, i18next)
+    validate(watchedState.form.fields)
       .then((errors) => {
         watchedState.form.valid = isEmpty(errors);
         watchedState.form.processState = 'sending';
