@@ -30,7 +30,6 @@ export default () => {
       ru: {
         translation: {
           duplicateError: 'RSS уже существует',
-          // error: 'Ссылка должна быть валидным URL',
           invalidUrl: 'Ссылка должна быть валидным URL',
           uncorrectRss: 'Ресурс не содержит валидный RSS',
           networkError: 'Ошибка сети',
@@ -43,9 +42,7 @@ export default () => {
   const handleError = (element, error) => {
     if (error === 'duplicateError') {
       renderState(element, i18nextInstance.t('duplicateError'));
-    // } else if (error === 'Ссылка должна быть валидным URL') {
     } else if (error === 'invalidUrl') {
-      // renderState(element, i18nextInstance.t('error'));
       renderState(element, i18nextInstance.t('invalidUrl'));
     } else if (error === 'uncorrectRss') {
       renderState(element, i18nextInstance.t('uncorrectRss'));
