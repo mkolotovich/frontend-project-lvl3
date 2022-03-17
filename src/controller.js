@@ -54,7 +54,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
           //     modalTitle.textContent = link.textContent;
           //     link.classList.remove('fw-bold');
           //     link.classList.add('fw-normal');
-          //     const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+
           //     modalBody.textContent = post.postDescription;
           //   });
           // });
@@ -63,7 +63,7 @@ const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
             const button = el.querySelector('button');
             button.addEventListener('click', () => {
               const link = el.querySelector('a');
-              // const post = watchedState.form.posts.find((item) => item.name === link.textContent);
+
               const post = posts.find((item) => item.name === link.textContent);
               watchedState.form.currentNode = el;
               post.isReaded = true;
