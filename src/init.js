@@ -3,7 +3,6 @@ import onChange from 'on-change';
 import last from 'lodash/last.js';
 import runApp from './controller.js';
 import {
-  // renderState, renderPosts, renderFeeds, blockUi, unBlockUi,
   renderState, renderPosts, renderFeeds, renderModal, blockUi, unBlockUi,
 } from './view.js';
 
@@ -15,7 +14,6 @@ export default () => {
       valid: true,
       processState: 'filling',
       processError: null,
-      // errors: {},
       currentNode: {},
       fields: {
         name: '',
@@ -49,10 +47,12 @@ export default () => {
       renderState(element, i18nextInstance.t('networkError'));
     }
   };
+
   const watchedPosts = onChange(state.form.posts, (path) => {
     const [index] = path.split('.');
     renderModal(state.form.posts[index], state.form.currentNode);
   });
+
   const watchedState = onChange(state, (path, value) => {
     const element = document.getElementById('floatingInput');
     switch (path) {
@@ -83,6 +83,5 @@ export default () => {
         break;
     }
   });
-  // runApp(i18nextInstance, watchedState);
   runApp(i18nextInstance, watchedState, watchedPosts);
 };

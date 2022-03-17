@@ -1,3 +1,10 @@
+const elements = {
+  title: document.querySelector('.modal-title'),
+  input: document.getElementById('floatingInput'),
+  description: document.querySelector('.modal-body'),
+  submit: document.querySelector('.w-100'),
+};
+
 export const renderPosts = (el) => {
   const list = document.querySelector('.container:last-child .col:first-child ul');
   const item = document.createElement('li');
@@ -15,14 +22,15 @@ export const renderPosts = (el) => {
 };
 
 export const renderModal = (post, el) => {
-  const modalTitle = document.querySelector('.modal-title');
-  const modalBody = document.querySelector('.modal-body');
+  // const modalTitle = document.querySelector('.modal-title');
+  // const modalBody = document.querySelector('.modal-body');
   const link = el.querySelector('a');
-  modalTitle.textContent = post.name;
+  // modalTitle.textContent = post.name;
+  elements.title.textContent = post.name;
   link.classList.remove('fw-bold');
   link.classList.add('fw-normal');
-  // const post = watchedState.form.posts.find((item) => item.name === link.textContent);
-  modalBody.textContent = post.postDescription;
+  // modalBody.textContent = post.postDescription;
+  elements.description.textContent = post.postDescription;
 };
 
 export const renderFeeds = (title, description) => {
@@ -49,17 +57,23 @@ export const renderState = (element, error) => {
 };
 
 export const blockUi = () => {
-  const submit = document.querySelector('.w-100');
-  const input = document.getElementById('floatingInput');
-  submit.disabled = true;
-  input.setAttribute('readonly', 'true');
+  // const submit = document.querySelector('.w-100');
+  // const input = document.getElementById('floatingInput');
+  // submit.disabled = true;
+  elements.submit.disabled = true;
+  // input.setAttribute('readonly', 'true');
+  elements.input.setAttribute('readonly', 'true');
 };
 
 export const unBlockUi = () => {
-  const submit = document.querySelector('.w-100');
-  const input = document.getElementById('floatingInput');
-  submit.disabled = false;
-  input.removeAttribute('readonly');
-  input.value = '';
-  input.focus();
+  // const submit = document.querySelector('.w-100');
+  // const input = document.getElementById('floatingInput');
+  // submit.disabled = false;
+  elements.submit.disabled = false;
+  // input.removeAttribute('readonly');
+  // input.value = '';
+  // input.focus();
+  elements.input.removeAttribute('readonly');
+  elements.input.value = '';
+  elements.input.focus();
 };
