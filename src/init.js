@@ -8,6 +8,7 @@ import {
 
 export default () => {
   const i18nextInstance = i18next.createInstance();
+
   const state = {
     form: {
       feeds: [],
@@ -22,6 +23,7 @@ export default () => {
       posts: [],
     },
   };
+
   i18nextInstance.init({
     lng: 'ru',
     resources: {
@@ -36,6 +38,7 @@ export default () => {
       },
     },
   });
+
   const handleError = (element, error) => {
     if (error === 'duplicateError') {
       renderState(element, i18nextInstance.t('duplicateError'));
@@ -83,5 +86,6 @@ export default () => {
         break;
     }
   });
+
   runApp(i18nextInstance, watchedState, watchedPosts);
 };

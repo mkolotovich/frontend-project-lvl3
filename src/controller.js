@@ -22,7 +22,6 @@ const validate = (fields, i18next) => schema.validate(fields, { abortEarly: fals
     return messages;
   });
 
-// const addNewPosts = (state, elements, value, i18next, feedId, posts) => {
 const addNewPosts = (state, value, i18next, feedId, posts) => {
   const watchedState = state;
   axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(value)}`)
@@ -69,7 +68,6 @@ const addNewPosts = (state, value, i18next, feedId, posts) => {
         const result = uniqBy(res, 'name');
         const newPostsDiff = result.slice(posts.length);
         newPostsDiff.map((el) => watchedState.form.posts.push(el));
-        // setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
         setTimeout(addNewPosts, 5000, watchedState, value, i18next, feedId, posts);
       }
     })
@@ -80,22 +78,12 @@ const addNewPosts = (state, value, i18next, feedId, posts) => {
 };
 
 export default (i18next, state, watchedPosts) => {
-  // const elements = {
-  //   title: document.querySelector('.modal-title'),
-  //   form: document.querySelector('form'),
-  //   name: document.getElementById('floatingInput'),
-  //   description: document.querySelector('.modal-body'),
-  //   submit: document.querySelector('.w-100'),
-  // };
   const form = document.querySelector('form');
-  // elements.form.addEventListener('submit', (e) => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    // const input = elements.form.elements.url;
     const input = form.elements.url;
     const { value } = input;
     const watchedState = state;
-    // const { posts } = watchedState.form;
     watchedState.form.fields.name = value;
     validate(watchedState.form.fields, i18next)
       .then((errors) => {
@@ -103,9 +91,7 @@ export default (i18next, state, watchedPosts) => {
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
           const feedId = uniqueId();
-          // addNewPosts(watchedState, elements, value, i18next, feedId, watchedPosts);
           addNewPosts(watchedState, value, i18next, feedId, watchedPosts);
-          // setTimeout(addNewPosts, 5000, watchedState, elements, value, i18next, feedId, posts);
           setTimeout(addNewPosts, 5000, watchedState, value, i18next, feedId, watchedPosts);
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';
