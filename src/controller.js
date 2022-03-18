@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import isEmpty from 'lodash/isEmpty.js';
 import uniqueId from 'lodash/uniqueId.js';
 import uniqBy from 'lodash/uniqBy.js';
 import axios from 'axios';
@@ -14,13 +13,7 @@ const parse = (response) => {
 };
 
 const validate = (fields) => schema.validate(fields, { abortEarly: false })
-  .then(() => {
-    const obj = {};
-    return obj;
-  }).catch(() => {
-    const messages = 'invalidUrl';
-    return messages;
-  });
+  .then(() => '').catch(() => 'invalidUrl');
 
 const addNewPosts = (state, value, i18next, feedId, posts) => {
   const watchedState = state;
@@ -87,7 +80,7 @@ export default (i18next, state, watchedPosts) => {
     watchedState.form.fields.name = value;
     validate(watchedState.form.fields)
       .then((errors) => {
-        watchedState.form.valid = isEmpty(errors);
+        watchedState.form.valid = errors === '';
         watchedState.form.processState = 'sending';
         if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
           const feedId = uniqueId();
