@@ -1,4 +1,4 @@
-export const renderPosts = (el, viewMessage) => {
+export const renderPosts = (el, viewMessage, i18next) => {
   const list = document.querySelector('.container:last-child .col:first-child ul');
   const item = document.createElement('li');
   item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
@@ -7,7 +7,7 @@ export const renderPosts = (el, viewMessage) => {
   link.href = el.link;
   link.classList.add('fw-bold');
   const button = document.createElement('button');
-  button.textContent = viewMessage;
+  button.textContent = i18next.t(viewMessage);
   button.setAttribute('data-bs-toggle', 'modal');
   button.setAttribute('data-bs-target', '#exampleModal');
   item.append(link, button);
@@ -36,15 +36,15 @@ export const renderFeeds = (title, description) => {
   list.append(item);
 };
 
-export const renderState = (element, error) => {
-  const message = document.querySelector('.col-10 div:last-child');
-  if (error === 'RSS успешно загружен') {
+export const renderState = (message, i18next) => {
+  const element = document.getElementById('floatingInput');
+  const messageNode = document.querySelector('.col-10 div:last-child');
+  if (message === 'success') {
     element.classList.remove('is-invalid');
-    message.textContent = error;
   } else {
-    message.textContent = error;
     element.classList.add('is-invalid');
   }
+  messageNode.textContent = i18next.t(message);
 };
 
 export const blockUi = () => {

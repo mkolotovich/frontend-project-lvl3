@@ -40,33 +40,20 @@ export default () => {
     },
   });
 
-  const handleError = (element, error) => {
-    if (error === 'duplicateError') {
-      renderState(element, i18nextInstance.t('duplicateError'));
-    } else if (error === 'invalidUrl') {
-      renderState(element, i18nextInstance.t('invalidUrl'));
-    } else if (error === 'uncorrectRss') {
-      renderState(element, i18nextInstance.t('uncorrectRss'));
-    } else if (error === 'networkError') {
-      renderState(element, i18nextInstance.t('networkError'));
-    }
-  };
-
   const watchedPosts = onChange(state.form.posts, (path) => {
     const [index] = path.split('.');
     renderModal(state.form.posts[index], state.form.currentNode);
   });
 
   const watchedState = onChange(state, (path, value) => {
-    const element = document.getElementById('floatingInput');
     switch (path) {
       case 'form.posts': {
         const item = last(watchedState.form.posts);
-        renderPosts(item, i18nextInstance.t('viewMessage'));
+        renderPosts(item, 'viewMessage', i18nextInstance);
         break;
       }
       case 'form.feeds':
-        renderState(element, i18nextInstance.t('success'));
+        renderState('success', i18nextInstance);
         break;
       case 'form.feedsDescription': {
         const { title, description } = last(watchedState.form.feedsDescription);
@@ -79,7 +66,7 @@ export default () => {
         } else if (value === 'sent') {
           unBlockUi();
         } else if (value === 'error') {
-          handleError(element, watchedState.form.processError);
+          renderState(watchedState.form.processError, i18nextInstance);
           unBlockUi();
         }
         break;
