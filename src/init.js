@@ -52,7 +52,6 @@ export default () => {
 
   const watchedPosts = onChange(state.form.posts, (path) => {
     const [index] = path.split('.');
-    // renderModal(state.form.posts[index], state.form.currentNode);
     renderModal(state.form.posts[index], state.form.currentNode, elements);
   });
 
@@ -60,31 +59,24 @@ export default () => {
     switch (path) {
       case 'form.posts': {
         const item = last(watchedState.form.posts);
-        // renderPosts(item, 'viewMessage', i18nextInstance);
         renderPosts(item, 'viewMessage', i18nextInstance, elements);
         break;
       }
       case 'form.feeds':
-        // renderState('success', i18nextInstance);
         renderState('success', i18nextInstance, elements);
         break;
       case 'form.feedsDescription': {
         const { title, description } = last(watchedState.form.feedsDescription);
-        // renderFeeds(title, description);
         renderFeeds(title, description, elements);
         break;
       }
       case 'form.processState':
         if (value === 'sending') {
-          // blockUi();
           blockUi(elements);
         } else if (value === 'sent') {
-          // unBlockUi();
           unBlockUi(elements);
         } else if (value === 'error') {
-          // renderState(watchedState.form.processError, i18nextInstance);
           renderState(watchedState.form.processError, i18nextInstance, elements);
-          // unBlockUi();
           unBlockUi(elements);
         }
         break;

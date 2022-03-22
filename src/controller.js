@@ -3,17 +3,18 @@ import uniqueId from 'lodash/uniqueId.js';
 import uniqBy from 'lodash/uniqBy.js';
 import axios from 'axios';
 
-const schema = yup.object().shape({
-  name: yup.string().url().trim().required(),
-});
-
 const parse = (response) => {
   const parser = new DOMParser();
   return parser.parseFromString(response, 'application/xml');
 };
 
-const validate = (fields) => schema.validate(fields, { abortEarly: false })
-  .then(() => '').catch(() => 'invalidUrl');
+const validate = (fields) => {
+  const schema = yup.object().shape({
+    name: yup.string().url().trim().required(),
+  });
+  return schema.validate(fields, { abortEarly: false })
+    .then(() => '').catch(() => 'invalidUrl');
+};
 
 const addNewPosts = (state, value, i18next, feedId, posts) => {
   const watchedState = state;
