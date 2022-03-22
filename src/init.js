@@ -85,5 +85,6 @@ export default () => {
     }
   });
 
-  runApp(i18nextInstance, watchedState, watchedPosts);
+  // runApp(i18nextInstance, watchedState, watchedPosts);
+  runApp(watchedState, watchedPosts);
 };
