@@ -1,14 +1,15 @@
-const elements = {
-  feedsList: document.querySelector('.container:last-child .col:last-child ul'),
-  postsList: document.querySelector('.container:last-child .col:first-child ul'),
-  modalTitle: document.querySelector('.modal-title'),
-  modalBody: document.querySelector('.modal-body'),
-  input: document.getElementById('floatingInput'),
-  messageNode: document.querySelector('.col-10 div:last-child'),
-  submit: document.querySelector('.w-100'),
-};
+// const elements = {
+//   feedsList: document.querySelector('.container:last-child .col:last-child ul'),
+//   postsList: document.querySelector('.container:last-child .col:first-child ul'),
+//   modalTitle: document.querySelector('.modal-title'),
+//   modalBody: document.querySelector('.modal-body'),
+//   input: document.getElementById('floatingInput'),
+//   messageNode: document.querySelector('.col-10 div:last-child'),
+//   submit: document.querySelector('.w-100'),
+// };
 
-export const renderPosts = (el, viewMessage, i18next) => {
+// export const renderPosts = (el, viewMessage, i18next) => {
+export const renderPosts = (el, viewMessage, i18next, elements) => {
   // const list = document.querySelector('.container:last-child .col:first-child ul');
   const item = document.createElement('li');
   item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
@@ -25,11 +26,13 @@ export const renderPosts = (el, viewMessage, i18next) => {
   elements.postsList.append(item);
 };
 
-export const renderModal = (post, el) => {
+// export const renderModal = (post, el) => {
+export const renderModal = (post, el, selectors) => {
   // const modalTitle = document.querySelector('.modal-title');
   // const modalBody = document.querySelector('.modal-body');
   const link = el.querySelector('a');
   // modalTitle.textContent = post.name;
+  const elements = selectors;
   elements.modalTitle.textContent = post.name;
   link.classList.remove('fw-bold');
   link.classList.add('fw-normal');
@@ -37,7 +40,8 @@ export const renderModal = (post, el) => {
   elements.modalBody.textContent = post.postDescription;
 };
 
-export const renderFeeds = (title, description) => {
+// export const renderFeeds = (title, description) => {
+export const renderFeeds = (title, description, elements) => {
   // const list = document.querySelector('.container:last-child .col:last-child ul');
   const item = document.createElement('li');
   item.classList.add('list-group-item', 'border-0');
@@ -50,9 +54,11 @@ export const renderFeeds = (title, description) => {
   elements.feedsList.append(item);
 };
 
-export const renderState = (message, i18next) => {
+// export const renderState = (message, i18next) => {
+export const renderState = (message, i18next, selectors) => {
   // const element = document.getElementById('floatingInput');
   // const messageNode = document.querySelector('.col-10 div:last-child');
+  const elements = selectors;
   if (message === 'success') {
     // element.classList.remove('is-invalid');
     elements.input.classList.remove('is-invalid');
@@ -64,7 +70,9 @@ export const renderState = (message, i18next) => {
   elements.messageNode.textContent = i18next.t(message);
 };
 
-export const blockUi = () => {
+// export const blockUi = () => {
+export const blockUi = (selectors) => {
+  const elements = selectors;
   // const submit = document.querySelector('.w-100');
   // const input = document.getElementById('floatingInput');
   // submit.disabled = true;
@@ -73,7 +81,9 @@ export const blockUi = () => {
   elements.input.setAttribute('readonly', 'true');
 };
 
-export const unBlockUi = () => {
+// export const unBlockUi = () => {
+export const unBlockUi = (selectors) => {
+  const elements = selectors;
   // const submit = document.querySelector('.w-100');
   // const input = document.getElementById('floatingInput');
   // submit.disabled = false;

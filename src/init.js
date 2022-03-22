@@ -40,34 +40,52 @@ export default () => {
     },
   });
 
+  const elements = {
+    feedsList: document.querySelector('.container:last-child .col:last-child ul'),
+    postsList: document.querySelector('.container:last-child .col:first-child ul'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    input: document.getElementById('floatingInput'),
+    messageNode: document.querySelector('.col-10 div:last-child'),
+    submit: document.querySelector('.w-100'),
+  };
+
   const watchedPosts = onChange(state.form.posts, (path) => {
     const [index] = path.split('.');
-    renderModal(state.form.posts[index], state.form.currentNode);
+    // renderModal(state.form.posts[index], state.form.currentNode);
+    renderModal(state.form.posts[index], state.form.currentNode, elements);
   });
 
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.posts': {
         const item = last(watchedState.form.posts);
-        renderPosts(item, 'viewMessage', i18nextInstance);
+        // renderPosts(item, 'viewMessage', i18nextInstance);
+        renderPosts(item, 'viewMessage', i18nextInstance, elements);
         break;
       }
       case 'form.feeds':
-        renderState('success', i18nextInstance);
+        // renderState('success', i18nextInstance);
+        renderState('success', i18nextInstance, elements);
         break;
       case 'form.feedsDescription': {
         const { title, description } = last(watchedState.form.feedsDescription);
-        renderFeeds(title, description);
+        // renderFeeds(title, description);
+        renderFeeds(title, description, elements);
         break;
       }
       case 'form.processState':
         if (value === 'sending') {
-          blockUi();
+          // blockUi();
+          blockUi(elements);
         } else if (value === 'sent') {
-          unBlockUi();
+          // unBlockUi();
+          unBlockUi(elements);
         } else if (value === 'error') {
-          renderState(watchedState.form.processError, i18nextInstance);
-          unBlockUi();
+          // renderState(watchedState.form.processError, i18nextInstance);
+          renderState(watchedState.form.processError, i18nextInstance, elements);
+          // unBlockUi();
+          unBlockUi(elements);
         }
         break;
       default:
