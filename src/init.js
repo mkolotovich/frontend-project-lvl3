@@ -34,6 +34,7 @@ export default () => {
           uncorrectRss: 'Ресурс не содержит валидный RSS',
           networkError: 'Ошибка сети',
           success: 'RSS успешно загружен',
+          viewMessage: 'Просмотр',
         },
       },
     },
@@ -61,7 +62,7 @@ export default () => {
     switch (path) {
       case 'form.posts': {
         const item = last(watchedState.form.posts);
-        renderPosts(item);
+        renderPosts(item, i18nextInstance.t('viewMessage'));
         break;
       }
       case 'form.feeds':

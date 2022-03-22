@@ -1,4 +1,4 @@
-export const renderPosts = (el) => {
+export const renderPosts = (el, viewMessage) => {
   const list = document.querySelector('.container:last-child .col:first-child ul');
   const item = document.createElement('li');
   item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
@@ -7,7 +7,7 @@ export const renderPosts = (el) => {
   link.href = el.link;
   link.classList.add('fw-bold');
   const button = document.createElement('button');
-  button.textContent = 'Просмотр';
+  button.textContent = viewMessage;
   button.setAttribute('data-bs-toggle', 'modal');
   button.setAttribute('data-bs-target', '#exampleModal');
   item.append(link, button);
