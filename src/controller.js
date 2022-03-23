@@ -26,7 +26,10 @@ const validate = (fields) => {
 
 const addNewPosts = (state, value, feedId, posts) => {
   const watchedState = state;
-  axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(value)}`)
+  const parsedURL = new URL('https://allorigins.hexlet.app/get');
+  parsedURL.searchParams.set('disableCache', 'true');
+  parsedURL.searchParams.set('url', value);
+  axios.get(parsedURL.href)
     .then((response) => {
       const doc = parse(response.data.contents);
       if (!watchedState.form.feeds.includes(value)) {
