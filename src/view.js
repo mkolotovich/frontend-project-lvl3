@@ -1,4 +1,3 @@
-// export const renderPosts = (el, viewMessage, i18next, elements) => {
 export const renderPosts = (posts, viewMessage, i18next, elements) => {
   const newList = document.createElement('ul');
   posts.forEach((el) => {
@@ -14,7 +13,6 @@ export const renderPosts = (posts, viewMessage, i18next, elements) => {
     button.setAttribute('data-bs-target', '#exampleModal');
     item.append(link, button);
     newList.append(item);
-    // elements.postsList.append(item);
   });
   elements.postsList.replaceChildren(...newList.children);
 };

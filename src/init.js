@@ -60,8 +60,6 @@ export default () => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.posts': {
-        // const item = last(watchedState.form.posts);
-        // renderPosts(item, 'viewMessage', i18nextInstance, elements);
         renderPosts(watchedState.form.posts, 'viewMessage', i18nextInstance, elements);
         break;
       }
