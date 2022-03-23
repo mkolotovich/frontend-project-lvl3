@@ -1,16 +1,22 @@
-export const renderPosts = (el, viewMessage, i18next, elements) => {
-  const item = document.createElement('li');
-  item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
-  const link = document.createElement('a');
-  link.textContent = el.name;
-  link.href = el.link;
-  link.classList.add('fw-bold');
-  const button = document.createElement('button');
-  button.textContent = i18next.t(viewMessage);
-  button.setAttribute('data-bs-toggle', 'modal');
-  button.setAttribute('data-bs-target', '#exampleModal');
-  item.append(link, button);
-  elements.postsList.append(item);
+// export const renderPosts = (el, viewMessage, i18next, elements) => {
+export const renderPosts = (posts, viewMessage, i18next, elements) => {
+  const newList = document.createElement('ul');
+  posts.forEach((el) => {
+    const item = document.createElement('li');
+    item.classList.add('list-group-item', 'border-0', 'd-flex', 'justify-content-between');
+    const link = document.createElement('a');
+    link.textContent = el.name;
+    link.href = el.link;
+    link.classList.add('fw-bold');
+    const button = document.createElement('button');
+    button.textContent = i18next.t(viewMessage);
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#exampleModal');
+    item.append(link, button);
+    newList.append(item);
+    // elements.postsList.append(item);
+  });
+  elements.postsList.replaceChildren(...newList.children);
 };
 
 export const renderModal = (post, el, selectors) => {

@@ -51,15 +51,18 @@ export default () => {
   };
 
   const watchedPosts = onChange(state.form.posts, (path) => {
-    const [index] = path.split('.');
-    renderModal(state.form.posts[index], state.form.currentNode, elements);
+    if (path !== '') {
+      const [index] = path.split('.');
+      renderModal(state.form.posts[index], state.form.currentNode, elements);
+    }
   });
 
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.posts': {
-        const item = last(watchedState.form.posts);
-        renderPosts(item, 'viewMessage', i18nextInstance, elements);
+        // const item = last(watchedState.form.posts);
+        // renderPosts(item, 'viewMessage', i18nextInstance, elements);
+        renderPosts(watchedState.form.posts, 'viewMessage', i18nextInstance, elements);
         break;
       }
       case 'form.feeds':
