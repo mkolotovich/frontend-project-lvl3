@@ -60,7 +60,6 @@ const addNewPosts = (state, value, feedId, posts) => {
               post.isReaded = true;
             });
           });
-          // setTimeout(addNewPosts, 5000, watchedState, value, feedId, watchedState.form.posts);
         } else {
           watchedState.form.processError = 'uncorrectRss';
           watchedState.form.processState = 'error';
@@ -74,7 +73,6 @@ const addNewPosts = (state, value, feedId, posts) => {
         const res = [...posts, ...newPosts];
         const result = uniqBy(res, 'name');
         watchedState.form.posts = result;
-        // setTimeout(addNewPosts, 5000, watchedState, value, feedId, posts);
       }
       setTimeout(addNewPosts, 5000, watchedState, value, feedId, watchedState.form.posts);
     })
