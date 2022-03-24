@@ -32,7 +32,6 @@ export default () => {
           duplicateError: 'RSS уже существует',
           invalidUrl: 'Ссылка должна быть валидным URL',
           uncorrectRss: 'Ресурс не содержит валидный RSS',
-          // networkError: 'Ошибка сети',
           'Network Error': 'Ошибка сети',
           success: 'RSS успешно загружен',
           viewMessage: 'Просмотр',
