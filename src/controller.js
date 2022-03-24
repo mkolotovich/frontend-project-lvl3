@@ -41,22 +41,6 @@ const addNewFeed = (state, value, doc, feedId, posts) => {
   watchedState.form.feedsDescription.push({ title, description, id: feedId });
   watchedState.form.posts = parsedPosts;
   parsedPosts.forEach((el) => posts.push(el));
-  // const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
-  // renderedPosts.forEach((el) => {
-  //   const button = el.querySelector('button');
-  //   button.addEventListener('click', () => {
-  //     const link = el.querySelector('a');
-  //     const post = posts.find((item) => item.name === link.textContent);
-  //     watchedState.form.currentNode = el;
-  //     post.isReaded = true;
-  //   });
-  // });
-  // const postsList = document.querySelector('.col-8 .list-group');
-  // postsList.addEventListener('click', (event) => {
-  //   const { target } = event;
-  //   const post = posts.find((item) => item.id === target.dataset.id);
-  //   post.isReaded = true;
-  // });
 };
 
 const updateFeed = (doc, feedId, posts, state) => {
@@ -109,11 +93,12 @@ export default (state, watchedPosts) => {
           addNewPosts(watchedState, value, feedId, watchedPosts);
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';
-          watchedState.form.processState = 'error';
+          // watchedState.form.processState = 'error';
         } else {
           watchedState.form.processError = `${errors}`;
-          watchedState.form.processState = 'error';
+          // watchedState.form.processState = 'error';
         }
+        watchedState.form.processState = 'error';
       });
   });
   const postsList = document.querySelector('.col-8 .list-group');

@@ -23,9 +23,7 @@ export const renderPosts = (posts, viewMessage, i18next, elements) => {
   elements.postsList.replaceChildren(...newList.children);
 };
 
-// export const renderModal = (post, el, selectors) => {
 export const renderModal = (post, selectors) => {
-  // const link = el.querySelector('a');
   const link = selectors.postsList.querySelector(`[data-id="${post.id}"]`);
   const elements = selectors;
   elements.modalTitle.textContent = post.name;

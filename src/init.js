@@ -15,7 +15,6 @@ export default () => {
       valid: true,
       processState: 'filling',
       processError: null,
-      // currentNode: {},
       fields: {
         name: '',
       },
@@ -53,7 +52,6 @@ export default () => {
   const watchedPosts = onChange(state.form.posts, (path) => {
     if (path !== '') {
       const [index] = path.split('.');
-      // renderModal(state.form.posts[index], state.form.currentNode, elements);
       renderModal(state.form.posts[index], elements);
     }
   });
