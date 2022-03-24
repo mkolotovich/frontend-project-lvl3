@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
 import uniqBy from 'lodash/uniqBy.js';
-import empty from 'lodash/isEmpty.js';
+// import empty from 'lodash/isEmpty.js';
 import axios from 'axios';
 
 const parse = (response, feedId) => {
@@ -22,7 +22,8 @@ const parse = (response, feedId) => {
     });
     return { title, description, posts };
   }
-  return {};
+  // return {};
+  throw new Error('uncorrectRss');
 };
 
 const validate = (fields) => {
@@ -42,28 +43,28 @@ const addNewPosts = (state, value, feedId, posts) => {
     .then((response) => {
       const doc = parse(response.data.contents, feedId);
       if (!watchedState.form.feeds.includes(value)) {
-        if (!empty(doc)) {
-          watchedState.form.feeds.push(value);
-          watchedState.form.processState = 'sent';
-          const { title, description } = doc;
-          const parsedPosts = doc.posts;
-          watchedState.form.feedsDescription.push({ title, description, id: feedId });
-          watchedState.form.posts = parsedPosts;
-          parsedPosts.forEach((el) => posts.push(el));
-          const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
-          renderedPosts.forEach((el) => {
-            const button = el.querySelector('button');
-            button.addEventListener('click', () => {
-              const link = el.querySelector('a');
-              const post = posts.find((item) => item.name === link.textContent);
-              watchedState.form.currentNode = el;
-              post.isReaded = true;
-            });
+        // if (!empty(doc)) {
+        watchedState.form.feeds.push(value);
+        watchedState.form.processState = 'sent';
+        const { title, description } = doc;
+        const parsedPosts = doc.posts;
+        watchedState.form.feedsDescription.push({ title, description, id: feedId });
+        watchedState.form.posts = parsedPosts;
+        parsedPosts.forEach((el) => posts.push(el));
+        const renderedPosts = document.querySelectorAll('.col-8 .list-group li');
+        renderedPosts.forEach((el) => {
+          const button = el.querySelector('button');
+          button.addEventListener('click', () => {
+            const link = el.querySelector('a');
+            const post = posts.find((item) => item.name === link.textContent);
+            watchedState.form.currentNode = el;
+            post.isReaded = true;
           });
-        } else {
-          watchedState.form.processError = 'uncorrectRss';
-          watchedState.form.processState = 'error';
-        }
+        });
+        // } else {
+        // watchedState.form.processError = 'uncorrectRss';
+        // watchedState.form.processState = 'error';
+        // }
       } else {
         const parsedPosts = doc.posts;
         const newPosts = parsedPosts.map((el) => {
@@ -76,8 +77,10 @@ const addNewPosts = (state, value, feedId, posts) => {
       }
       setTimeout(addNewPosts, 5000, watchedState, value, feedId, watchedState.form.posts);
     })
-    .catch(() => {
-      watchedState.form.processError = 'networkError';
+    // .catch(() => {
+    .catch((e) => {
+      // watchedState.form.processError = 'networkError';
+      watchedState.form.processError = e.message;
       watchedState.form.processState = 'error';
     });
 };
