@@ -24,15 +24,12 @@ const parse = (response, feedId) => {
   throw new Error('uncorrectRss');
 };
 
-// const validate = (fields) => {
 const validate = (fields, feeds) => {
   const schema = yup.object({
-    // name: yup.string().url().trim().required(),
     name: yup.string().url().trim().required()
       .notOneOf(feeds),
   });
   return schema.validate(fields, { abortEarly: false })
-    // .then(() => '').catch(() => 'invalidUrl');
     .then(() => '').catch((e) => {
       if (e.message === 'name must be a valid URL') {
         return 'invalidUrl';
@@ -93,18 +90,13 @@ export default (state, watchedPosts) => {
     const { value } = input;
     const watchedState = state;
     watchedState.form.fields.name = value;
-    // validate(watchedState.form.fields)
     validate(watchedState.form.fields, watchedState.form.feeds)
       .then((errors) => {
         watchedState.form.valid = errors === '';
         watchedState.form.processState = 'sending';
-        // if (watchedState.form.valid && !watchedState.form.feeds.includes(value)) {
         if (watchedState.form.valid) {
           const feedId = uniqueId();
           addNewPosts(watchedState, value, feedId, watchedPosts);
-        // } else if (watchedState.form.feeds.includes(value)) {
-        //   watchedState.form.processError = 'duplicateError';
-        //   watchedState.form.processState = 'error';
         } else {
           watchedState.form.processError = `${errors}`;
           watchedState.form.processState = 'error';
