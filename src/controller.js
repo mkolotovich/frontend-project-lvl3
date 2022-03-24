@@ -93,12 +93,11 @@ export default (state, watchedPosts) => {
           addNewPosts(watchedState, value, feedId, watchedPosts);
         } else if (watchedState.form.feeds.includes(value)) {
           watchedState.form.processError = 'duplicateError';
-          // watchedState.form.processState = 'error';
+          watchedState.form.processState = 'error';
         } else {
           watchedState.form.processError = `${errors}`;
-          // watchedState.form.processState = 'error';
+          watchedState.form.processState = 'error';
         }
-        watchedState.form.processState = 'error';
       });
   });
   const postsList = document.querySelector('.col-8 .list-group');
