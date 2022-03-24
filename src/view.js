@@ -6,19 +6,27 @@ export const renderPosts = (posts, viewMessage, i18next, elements) => {
     const link = document.createElement('a');
     link.textContent = el.name;
     link.href = el.link;
-    link.classList.add('fw-bold');
+    if (el.isReaded === false) {
+      link.classList.add('fw-bold');
+    } else {
+      link.classList.add('fw-normal');
+    }
+    link.setAttribute('data-id', el.id);
     const button = document.createElement('button');
     button.textContent = i18next.t(viewMessage);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#exampleModal');
+    button.setAttribute('data-id', el.id);
     item.append(link, button);
     newList.append(item);
   });
   elements.postsList.replaceChildren(...newList.children);
 };
 
-export const renderModal = (post, el, selectors) => {
-  const link = el.querySelector('a');
+// export const renderModal = (post, el, selectors) => {
+export const renderModal = (post, selectors) => {
+  // const link = el.querySelector('a');
+  const link = selectors.postsList.querySelector(`[data-id="${post.id}"]`);
   const elements = selectors;
   elements.modalTitle.textContent = post.name;
   link.classList.remove('fw-bold');
