@@ -40,8 +40,10 @@ export default () => {
   });
 
   const elements = {
-    feedsList: document.querySelector('.container:last-child .col:last-child ul'),
-    postsList: document.querySelector('.container:last-child .col:first-child ul'),
+    // feedsList: document.querySelector('.container:last-child .col:last-child ul'),
+    feedsList: document.querySelector('.container .col:last-child ul'),
+    // postsList: document.querySelector('.container:last-child .col:first-child ul'),
+    postsList: document.querySelector('.container .col:first-child ul'),
     modalTitle: document.querySelector('.modal-title'),
     modalBody: document.querySelector('.modal-body'),
     input: document.getElementById('floatingInput'),
